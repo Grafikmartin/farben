@@ -38,23 +38,37 @@ h1, h2 {
 input, button {
     margin: 5px;
     padding: 10px;
-    font-size: 16px;
-    border: 1px solid #00bcd4;
-    border-radius: 5px;
-    background-color: #000;
-    color: #fff;
+    font-size: 14px;
+    border: 1px solid var(--button-border-color);
+    border-radius: 20px;
+    background-color: black;
+    color: var(--text-color);
+    margin-bottom: 12px;
+    text-align: center;
 }
 #plz-eingabe {
    
     max-width: 100px;
 }
 button {
+    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.6),
+    inset -3px -3px 5px rgba(0, 0, 0, 0.9);
+
+color: var(--button-border-color);
+background-image: radial-gradient(at 88% 40%,
+        hsla(240, 15%, 9%, 0.1) 0px,
+        transparent 5%),
+    radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .2) 0px, transparent 50%),
+    radial-gradient(at 10% 4%, hsla(189, 97%, 36%, .2) 0px, transparent 50%),
+    radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .2) 0px, transparent 50%);
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #00bcd4;
-    color: #000;
+    background-color: var(--button-hover-bg);
+    color: var(--background-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: url('./assets/pointer.png') 10 5, pointer;
 }
 
 
@@ -84,6 +98,7 @@ button:hover {
 /* Stile für das Diagramm-Container */
 
 .extrahintergrund {
+    margin-top: 20px;
     border: 1px solid var(--button-border-color);
     height: 370px;
     width: 350px;
