@@ -2,128 +2,132 @@ const API_KEY = "dWL7n8jTc69tmrPmxxoNMfeaCUGJzKCR";
 
 document.getElementById("suchen").addEventListener("click", async () => {
     const stadt = document.getElementById("stadt-eingabe").value.trim();
-    const plz = document.getElementById("plz-eingabe").value.trim();
-    const land = document.getElementById("land-eingabe").value.trim();
     const status = document.getElementById("status");
+    const extrahintergrund = document.querySelector(".extrahintergrund");
+    const diagrammContainer = document.getElementById("diagramm-container");
 
     if (!stadt) {
-        status.textContent = "Bitte geben Sie mindestens eine Stadt ein.";
+        status.textContent = "Bitte eine Stadt eingeben!";
         return;
     }
 
-    status.textContent = "Daten werden geladen...";
+    status.textContent = "Lade Wetterdaten...";
+    
     try {
-        const koords = await holeKoordinaten(stadt, plz, land);
+        const koords = await holeKoordinaten(stadt);
         if (!koords) throw new Error("Ort nicht gefunden.");
-
+        
         const wetterDaten = await ladeWetterDaten(koords.lat, koords.lon);
-
-        zeigeGrundlegendeInfo(wetterDaten);
-        zeigeAktuelleDaten(wetterDaten);
-        zeigeStundenDaten(wetterDaten);
-        zeigeTageDaten(wetterDaten);
-
         status.textContent = "";
+
+        // 🎯 Erst jetzt Hintergrund & Diagramm sichtbar machen!
+        extrahintergrund.style.display = "block";
+        diagrammContainer.style.display = "block";
+
+        // 🎨 Langsam einblenden für bessere Optik
+        setTimeout(() => {
+            extrahintergrund.style.opacity = "1";
+            diagrammContainer.style.opacity = "1";
+        }, 50);
+
+        zeigeStundenDiagramme(wetterDaten);
     } catch (error) {
         status.textContent = `Fehler: ${error.message}`;
     }
 });
-function zeigeTageDaten(daten) {
-    const container = document.getElementById("tage-container");
-    container.innerHTML = ""; // Vorherige Inhalte löschen
 
-    daten.daily.data.forEach(tag => {
-        const datum = new Date(tag.time * 1000); // Zeitstempel umwandeln
-        container.innerHTML += `
-            <div>
-                <p><strong>${datum.toLocaleDateString()}</strong></p>
-                <p>Zusammenfassung: ${tag.summary}</p>
-                <p>Max. Temperatur: ${((tag.temperatureMax - 32) * 5 / 9).toFixed(2)} °C</p>
-                <p>Min. Temperatur: ${((tag.temperatureMin - 32) * 5 / 9).toFixed(2)} °C</p>
-                <p>UV-Index: ${tag.uvIndex}</p>
-                <p>Niederschlagswahrscheinlichkeit: ${(tag.precipProbability * 100).toFixed(2)}%</p>
-            </div>
-        `;
-    });
-}
 
-async function holeKoordinaten(stadt, plz, land) {
-    const params = new URLSearchParams({ city: stadt, format: "json", limit: 1 });
-    if (plz) params.append("postalcode", plz);
-    if (land) params.append("country", land);
-
-    const response = await fetch(`https://nominatim.openstreetmap.org/search?${params.toString()}`);
+async function holeKoordinaten(stadt) {
+    const response = await fetch(`https://nominatim.openstreetmap.org/search?city=${stadt}&format=json&limit=1`);
     if (!response.ok) throw new Error("Fehler beim Abrufen der Ortskoordinaten.");
     const daten = await response.json();
-
-    if (daten.length === 0) return null;
-    return { lat: daten[0].lat, lon: daten[0].lon };
+    return daten.length > 0 ? { lat: daten[0].lat, lon: daten[0].lon } : null;
 }
 
 async function ladeWetterDaten(lat, lon) {
-    const apiUrl = `https://api.pirateweather.net/forecast/${API_KEY}/${lat},${lon}?extend=hourly`;
-    const response = await fetch(apiUrl);
+    const response = await fetch(`https://api.pirateweather.net/forecast/${API_KEY}/${lat},${lon}?extend=hourly`);
     if (!response.ok) throw new Error("Fehler beim Abrufen der Wetterdaten.");
     return await response.json();
 }
 
-function zeigeGrundlegendeInfo(daten) {
-    document.getElementById("koordinaten").textContent = `Koordinaten: ${daten.latitude}, ${daten.longitude}`;
-    document.getElementById("zeitzone").textContent = `Zeitzone: ${daten.timezone}`;
-    document.getElementById("hoehe").textContent = `Höhe: ${daten.elevation} Meter`;
+function zeigeStundenDiagramme(daten) {
+    const stunden = daten.hourly.data.slice(0, 24);
+    const labels = stunden.map(stunde => new Date(stunde.time * 1000).getHours() + " Uhr");
+
+    // 🔥 Temperatur in °C umrechnen & in Float konvertieren
+    const temperaturen = stunden.map(stunde => Number(((stunde.temperature - 32) * 5 / 9).toFixed(2)));
+
+    // 🔥 Niederschlag bleibt gleich (mm/h)
+    const niederschlag = stunden.map(stunde => Number(stunde.precipIntensity.toFixed(2)));
+
+    // 🔥 Windgeschwindigkeit bleibt gleich (m/s)
+    const windgeschwindigkeit = stunden.map(stunde => Number(stunde.windSpeed.toFixed(2)));
+
+    // Diagramme aktualisieren
+    erstelleDiagramm("temperaturChart", "Temperatur (°C)", labels, temperaturen, "#00bcd4");
+    erstelleDiagramm("niederschlagChart", "Niederschlag (mm/h)", labels, niederschlag, "#00bcd4");
+    erstelleDiagramm("windChart", "Windgeschwindigkeit (m/s)", labels, windgeschwindigkeit, "#00bcd4");
 }
 
+function erstelleDiagramm(canvasId, label, labels, daten, farbe) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
 
-function zeigeStundenDaten(daten) {
-    const container = document.getElementById("stunden-container");
-    container.innerHTML = "";
+    const ctx = canvas.getContext("2d");
 
-    daten.hourly.data.slice(0, 24).forEach(stunde => {
-        const zeit = new Date(stunde.time * 1000);
-        container.innerHTML += `
-            <div>
-                <p><strong>${zeit.toLocaleString()}</strong></p>
-                <p>Zusammenfassung: ${stunde.summary}</p>
-                <p>Temperatur: ${((stunde.temperature - 32) * 5 / 9).toFixed(2)} °C</p>
-                <p>Windgeschwindigkeit: ${stunde.windSpeed} m/s</p>
-            </div>
-        `;
+    // Falls bereits ein Diagramm existiert, zerstören
+    if (window[canvasId] instanceof Chart) {
+        window[canvasId].destroy();
+    }
+
+    window[canvasId] = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: label,
+                data: daten,
+                backgroundColor: farbe,
+                borderColor: "#00bcd4",
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: "#00bcd4", // 🌟 Legenden-Textfarbe
+                        font: { size: 14 }
+                    }
+                }
+            },
+            scales: {
+                x: { 
+                    title: { display: true, text: "Uhrzeit", color: "#00bcd4", font: { size: 14 }},
+                    ticks: { color: "#00bcd4" },
+                    grid: { color: "rgba(0, 188, 212, 0.25)" } // 🌟 Gitternetzlinien auf 50% #00bcd4 setzen
+                },
+                y: { 
+                    title: { display: true, text: label, color: "#00bcd4", font: { size: 14 }},
+                    ticks: { color: "#00bcd4" },
+                    grid: { color: "rgba(0, 188, 212, 0.25)" } // 🌟 Auch Y-Achse mit 50% Transparenz
+                }
+            }
+        }
     });
 }
-function zeigeAktuelleDaten(daten) {
-    const aktuell = daten.currently;
-    if (!aktuell) return;
 
-    // Wetter-Icon und Zusammenfassung
-    document.getElementById("zusammenfassung").innerHTML = `
-        Zusammenfassung: ${aktuell.summary} 
-        ${zeigeWetterIcon(aktuell.icon)}
-    `;
 
-    // Weitere Wetterdetails
-    document.getElementById("temperatur").textContent = `Temperatur: ${((aktuell.temperature - 32) * 5 / 9).toFixed(2)} °C`;
-    document.getElementById("gefuehlte-temperatur").textContent = `Gefühlte Temperatur: ${((aktuell.apparentTemperature - 32) * 5 / 9).toFixed(2)} °C`;
-    document.getElementById("luftfeuchtigkeit").textContent = `Luftfeuchtigkeit: ${(aktuell.humidity * 100).toFixed(2)}%`;
-    document.getElementById("luftdruck").textContent = `Luftdruck: ${aktuell.pressure} hPa`;
-    document.getElementById("windgeschwindigkeit").textContent = `Windgeschwindigkeit: ${aktuell.windSpeed} m/s`;
-    document.getElementById("uv-index").textContent = `UV-Index: ${aktuell.uvIndex}`;
-    document.getElementById("wolkendecke").textContent = `Wolkendecke: ${(aktuell.cloudCover * 100).toFixed(2)}%`;
-}
+// Diagramm-Wechsel durch Buttons
+document.getElementById("tempButton").addEventListener("click", () => zeigeDiagramm("temperaturChart"));
+document.getElementById("regenButton").addEventListener("click", () => zeigeDiagramm("niederschlagChart"));
+document.getElementById("windButton").addEventListener("click", () => zeigeDiagramm("windChart"));
 
-function zeigeWetterIcon(zustand) {
-    const iconMap = {
-        "clear-day": "wb_sunny",
-        "clear-night": "nights_stay",
-        "rain": "rainy",
-        "snow": "ac_unit",
-        "sleet": "grain",
-        "wind": "air",
-        "fog": "blur_on",
-        "cloudy": "cloud",
-        "partly-cloudy-day": "wb_cloudy",
-        "partly-cloudy-night": "cloudy_night"
-    };
-
-    const iconName = iconMap[zustand] || "help"; // Fallback-Icon
-    return `<span class="material-icons">${iconName}</span>`;
+function zeigeDiagramm(chartId) {
+    document.getElementById("temperaturChart").style.display = "none";
+    document.getElementById("niederschlagChart").style.display = "none";
+    document.getElementById("windChart").style.display = "none";
+    document.getElementById(chartId).style.display = "block";
 }
