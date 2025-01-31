@@ -50,23 +50,62 @@ async function ladeWetterDaten(lat, lon) {
     return await response.json();
 }
 
-function zeigeStundenDiagramme(daten) {
-    const stunden = daten.hourly.data.slice(0, 24);
-    const labels = stunden.map(stunde => new Date(stunde.time * 1000).getHours() + " Uhr");
 
-    // 🔥 Temperatur in °C umrechnen & in Float konvertieren
-    const temperaturen = stunden.map(stunde => Number(((stunde.temperature - 32) * 5 / 9).toFixed(2)));
 
-    // 🔥 Niederschlag bleibt gleich (mm/h)
-    const niederschlag = stunden.map(stunde => Number(stunde.precipIntensity.toFixed(2)));
 
-    // 🔥 Windgeschwindigkeit bleibt gleich (m/s)
-    const windgeschwindigkeit = stunden.map(stunde => Number(stunde.windSpeed.toFixed(2)));
+function zeigeDiagramm(chartId) {
+    // Alle Diagramme verstecken
+    const charts = [
+        "temperaturChart", "appTempChart", "niederschlagChart", "precipProbabilityChart",
+        "windChart", "boeenChart", "humidityChart", "uvIndexChart", "pressureChart",
+        "cloudCoverChart", "visibilityChart"
+    ];
+    
+    charts.forEach(id => {
+        const chartElement = document.getElementById(id);
+        if (chartElement) {
+            chartElement.style.display = "none";
+        }
+    });
 
-    // Diagramme aktualisieren
-    erstelleDiagramm("temperaturChart", "Temperatur (°C)", labels, temperaturen, "#00bcd4");
-    erstelleDiagramm("niederschlagChart", "Niederschlag (mm/h)", labels, niederschlag, "#00bcd4");
-    erstelleDiagramm("windChart", "Windgeschwindigkeit (m/s)", labels, windgeschwindigkeit, "#00bcd4");
+    // Gewünschtes Diagramm anzeigen
+    const activeChart = document.getElementById(chartId);
+    if (activeChart) {
+        activeChart.style.display = "block";
+    }
+
+    // Alle Buttons zurücksetzen
+    const buttons = [
+        "tempButton", "appTempButton", "regenButton", "precipProbability", 
+        "windButton", "boeenButton", "humidity", "uvIndexButton", "pressure", 
+        "cloudCover", "visibilityButton"
+    ];
+
+    buttons.forEach(btnId => {
+        const btnElement = document.getElementById(btnId);
+        if (btnElement) {
+            btnElement.classList.remove("active-button");
+        }
+    });
+
+    // Passenden Button aktivieren
+    const activeButtonMap = {
+        "temperaturChart": "tempButton",
+        "appTempChart": "appTempButton",
+        "niederschlagChart": "regenButton",
+        "precipProbabilityChart": "precipProbability",
+        "windChart": "windButton",
+        "boeenChart": "boeenButton",
+        "humidityChart": "humidity",
+        "uvIndexChart": "uvIndexButton",
+        "pressureChart": "pressure",
+        "cloudCoverChart": "cloudCover",
+        "visibilityChart": "visibilityButton"
+    };
+
+    if (activeButtonMap[chartId]) {
+        document.getElementById(activeButtonMap[chartId]).classList.add("active-button");
+    }
 }
 
 function erstelleDiagramm(canvasId, label, labels, daten, farbe) {
@@ -75,7 +114,6 @@ function erstelleDiagramm(canvasId, label, labels, daten, farbe) {
 
     const ctx = canvas.getContext("2d");
 
-    // Falls bereits ein Diagramm existiert, zerstören
     if (window[canvasId] instanceof Chart) {
         window[canvasId].destroy();
     }
@@ -88,7 +126,7 @@ function erstelleDiagramm(canvasId, label, labels, daten, farbe) {
                 label: label,
                 data: daten,
                 backgroundColor: farbe,
-                borderColor: "#00bcd4",
+                borderColor: farbe,
                 borderWidth: 1
             }]
         },
@@ -119,15 +157,55 @@ function erstelleDiagramm(canvasId, label, labels, daten, farbe) {
     });
 }
 
-
-// Diagramm-Wechsel durch Buttons
-document.getElementById("tempButton").addEventListener("click", () => zeigeDiagramm("temperaturChart"));
-document.getElementById("regenButton").addEventListener("click", () => zeigeDiagramm("niederschlagChart"));
-document.getElementById("windButton").addEventListener("click", () => zeigeDiagramm("windChart"));
-
-function zeigeDiagramm(chartId) {
-    document.getElementById("temperaturChart").style.display = "none";
-    document.getElementById("niederschlagChart").style.display = "none";
-    document.getElementById("windChart").style.display = "none";
-    document.getElementById(chartId).style.display = "block";
+function zeigeStundenDiagramme(daten) {
+    const stunden = daten.hourly.data.slice(0, 24);
+    const labels = stunden.map(stunde => new Date(stunde.time * 1000).getHours() + " Uhr");
+    
+    const temperaturen = stunden.map(stunde => ((stunde.temperature - 32) * 5 / 9).toFixed(2));
+    const gefuehlteTemperatur = stunden.map(stunde => ((stunde.apparentTemperature - 32) * 5 / 9).toFixed(2));
+    const niederschlag = stunden.map(stunde => stunde.precipIntensity.toFixed(2));
+    const regenwahrscheinlichkeit = stunden.map(stunde => (stunde.precipProbability * 100).toFixed(2));
+    const windgeschwindigkeit = stunden.map(stunde => stunde.windSpeed.toFixed(2));
+    const boeen = stunden.map(stunde => stunde.windGust.toFixed(2));
+    const luftfeuchtigkeit = stunden.map(stunde => (stunde.humidity * 100).toFixed(2));
+    const uvIndex = stunden.map(stunde => stunde.uvIndex);
+    const luftdruck = stunden.map(stunde => stunde.pressure.toFixed(2));
+    const wolkenbedeckung = stunden.map(stunde => (stunde.cloudCover * 100).toFixed(2));
+    const sichtweite = stunden.map(stunde => stunde.visibility.toFixed(2));
+    
+    erstelleDiagramm("temperaturChart", "Temperatur (°C)", labels, temperaturen, "#00bcd4");
+    erstelleDiagramm("appTempChart", "Gefühlte Temperatur (°C)", labels, gefuehlteTemperatur, "#00bcd4");
+    erstelleDiagramm("niederschlagChart", "Niederschlag (mm/h)", labels, niederschlag, "#2196F3");
+    erstelleDiagramm("precipProbabilityChart", "Regenwahrscheinlichkeit (%)", labels, regenwahrscheinlichkeit, "#00bcd4");
+    erstelleDiagramm("windChart", "Windgeschwindigkeit (m/s)", labels, windgeschwindigkeit, "#00bcd4");
+    erstelleDiagramm("boeenChart", "Böen (m/s)", labels, boeen, "#00bcd4");
+    erstelleDiagramm("humidityChart", "Luftfeuchtigkeit (%)", labels, luftfeuchtigkeit, "#00bcd4");
+    erstelleDiagramm("uvIndexChart", "UV-Index", labels, uvIndex, "#00bcd4");
+    erstelleDiagramm("pressureChart", "Luftdruck (hPa)", labels, luftdruck, "#00bcd4");
+    erstelleDiagramm("cloudCoverChart", "Wolkenbedeckung (%)", labels, wolkenbedeckung, "#00bcd4");
+    erstelleDiagramm("visibilityChart", "Sichtweite (km)", labels, sichtweite, "#00bcd4");
 }
+
+const buttonChartMap = {
+    "tempButton": "temperaturChart",
+    "appTempButton": "appTempChart",
+    "regenButton": "niederschlagChart",
+    "precipProbability": "precipProbabilityChart",
+    "windButton": "windChart",
+    "boeenButton": "boeenChart",
+    "humidity": "humidityChart",
+    "uvIndexButton": "uvIndexChart",
+    "pressure": "pressureChart",
+    "cloudCover": "cloudCoverChart",
+    "visibilityButton": "visibilityChart"
+};
+
+Object.keys(buttonChartMap).forEach(buttonId => {
+    const buttonElement = document.getElementById(buttonId);
+    if (buttonElement) {
+        buttonElement.addEventListener("click", () => zeigeDiagramm(buttonChartMap[buttonId]));
+    }
+});
+
+
+

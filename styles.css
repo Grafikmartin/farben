@@ -30,15 +30,113 @@ body {
     cursor: url('./assets/cursor.png') 10 5, auto;
 }
 
-
-h1, h2 {
-    color: #00bcd4;
+button,
+a {
+    cursor: url('./assets/pointer.png') 10 5, pointer;
+    /* Froschhand für Pointer */
 }
 
-input, button {
+button,
+input,
+.bereich {
+    cursor: url('./assets/pointer.png') 10 5, pointer;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.container {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    /* Text zentrieren */
+    width: auto;
+    max-width: 800px;
+    overflow-x: hidden;
+
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 90px;
+    color: var(--icon-color);
+    opacity: .25;
+}
+
+.top-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--icon-color);
+    font-size: 24px;
+    transition: background-color 0.5s ease, transform 0.5s ease;
+    cursor: url('./assets/pointer.png') 10 5, pointer;
+}
+
+.icon-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.hidden {
+    display: none;
+}
+
+.logo {
+    transform: scale(0.20);
+    display: block;
+    margin-bottom: -80px;
+}
+
+h1,
+h2 {
+    color: var(--heading-color);
+}
+
+h1 {
+    font-size: 2.7rem;
+    margin-bottom: 60px;
+}
+
+.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+/* Stil für sichtbare Abschnitte */
+.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.laden {
+    animation: blinken 1.5s infinite;
+    /* Blinkanimation */
+    color: var(--status-color);
+}
+
+#status {
+    margin: 10px 0;
+    font-size: 14px;
+    color: var(--status-color);
+}
+
+input,
+button {
     margin: 5px;
     padding: 10px;
-    font-size: 14px;
+    font-size: 16px;
     border: 1px solid var(--button-border-color);
     border-radius: 20px;
     background-color: black;
@@ -46,61 +144,400 @@ input, button {
     margin-bottom: 12px;
     text-align: center;
 }
+
+#stadt-eingabe {
+    width: 200px;
+}
+
 #plz-eingabe {
-   
-    max-width: 100px;
+    width: 123px;
+    background-color: black;
 }
-button {
+
+#land-eingabe {
+    width: 200px;
+}
+
+#suchen {
     box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.6),
-    inset -3px -3px 5px rgba(0, 0, 0, 0.9);
-
-color: var(--button-border-color);
-background-image: radial-gradient(at 88% 40%,
-        hsla(240, 15%, 9%, 0.1) 0px,
-        transparent 5%),
-    radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .2) 0px, transparent 50%),
-    radial-gradient(at 10% 4%, hsla(189, 97%, 36%, .2) 0px, transparent 50%),
-    radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .2) 0px, transparent 50%);
-    cursor: pointer;
+        inset -3px -3px 5px rgba(0, 0, 0, 0.9);
+    width: 123px;
+    color: var(--button-border-color);
+    background-image: radial-gradient(at 88% 40%,
+            hsla(240, 15%, 9%, 0.1) 0px,
+            transparent 5%),
+        radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .25) 0px, transparent 50%),
+        radial-gradient(at 10% 4%, hsla(189, 97%, 36%, .25) 0px, transparent 50%),
+        radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .25) 0px, transparent 50%);
 }
 
-button:hover {
+button {
+    cursor: pointer;
+    transition: background-color 1s ease, transform 0.5s ease;
+}
+
+#suchen:hover {
     background-color: var(--button-hover-bg);
     color: var(--background-color);
     transition: background-color 0.3s ease, color 0.3s ease;
     cursor: url('./assets/pointer.png') 10 5, pointer;
 }
 
-
-h1 {
-    color: #00bcd4;
+input:focus,
+textarea:focus {
+    background-color: black;
+    color: var(--text-color);
+    border: 1px solid var(--button-border-color);
 }
 
-input, button {
-    margin: 10px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #00bcd4;
+input:-webkit-autofill {
+    background-color: black !important;
+    color: var(--text-color) !important;
+    -webkit-text-fill-color: var(--text-color) !important;
+    box-shadow: 0 0 0px 1000px black inset !important;
+}
+
+/* Unterstützung für Firefox */
+input:-moz-autofill {
+    background-color: black !important;
+    color: var(--text-color) !important;
+}
+
+input:focus {
+    background-color: black;
+    color: var(--text-color);
+    border: 1px solid var(--button-border-color);
+}
+
+@keyframes blinken {
+
+    0%,
+    100% {
+        opacity: 1;
+        /* Volle Sichtbarkeit */
+    }
+
+    50% {
+        opacity: 0.5;
+        /* Halbtransparent */
+    }
+}
+
+#grundlegende-info,
+#aktuelle-daten,
+#stunden-daten,
+#tage-daten {
+    margin-top: 20px;
+    width: 360px;
+    max-width: 500px;
+}
+
+#aktuelle-daten {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+#temp-card {
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg-color);
     border-radius: 15px;
-    background-color: #222;
-    color: #fff;
+    padding: 10px;
+    backdrop-filter: blur(1px);
+    margin: 10px 0;
+    z-index: -100;
+    border: 1px solid var(--button-border-color);
+    background-image: radial-gradient(at 88% 40%,
+            hsla(240, 15%, 9%, 0.1) 0px,
+            transparent 5%),
+        radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .5) 0px, transparent 50%),
+        radial-gradient(at 41% 4%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
+        radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
+    animation: blob-bounce 5s infinite ease;
 }
 
-button:hover {
-    background-color: #00bcd4;
-    color: #000;
+#temperatur {
+    vertical-align: middle;
+    font-size: 4.5rem;
+    color: var(--text-color);
+    margin-right: 10px;
 }
 
-#button-container {
-    margin-top: 0px;
+
+.mdi {
+    font-size: 110px;
+    vertical-align: middle;
+    color: var(--wetterIcon-color);
+    margin-left: 20px;
 }
 
+.wrapper {
+    top: 36px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+    z-index: -4;
+    margin-bottom: 150px;
+}
+
+.inner {
+    --w: 120px;
+    --h: 15vh;
+    --translateZ: calc((var(--w) + var(--h)) * 0.75);
+    --rotateX: -15deg;
+    --perspective: 1000px;
+    position: absolute;
+    width: var(--w);
+    height: var(--h);
+    z-index: 2;
+    transform-style: preserve-3d;
+    transform: perspective(var(--perspective));
+    animation: rotating 20s linear infinite;
+    border-radius: 5px;
+}
+
+@keyframes rotating {
+    from {
+        transform: perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(0);
+    }
+
+    to {
+        transform: perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(-1turn);
+    }
+}
+
+.card {
+    position: absolute;
+    width: 100%;
+    height: 45px;
+    border-radius: 15px;
+    background-color: rgba(var(--color-card), 0.6);
+    transform: rotateY(calc((360deg / var(--quantity)) * var(--index))) translateZ(var(--translateZ));
+    box-shadow: 0 0vh 0px rgba(255, 255, 255, 0.9);
+    background-color: rgba(var(--color-card), 0.9);
+    border: 1px solid var(--button-border-color);
+    background-color: rgba(var(--color-card), 0.9);
+    background-image: radial-gradient(at 88% 40%,
+            hsla(240, 15%, 9%, 0.1) 0px,
+            transparent 5%),
+        radial-gradient(at 0% 0%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
+        radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
+    box-shadow: 0px -16px 24px 0px rgba(255, 255, 255, 0.15) inset;
+    backdrop-filter: blur(1px);
+}
+
+/* Karte individuell ansprechbar 
+.card:nth-child(1) {}
+.card:nth-child(2) {}
+.card:nth-child(3) {}
+.card:nth-child(4) {}
+.card:nth-child(5) {}
+.card:nth-child(6) {} 
+*/
+
+.Wetterdaten {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: var(--text-color);
+    border-radius: 15px;
+    padding: 10px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+#map-container {
+    display: none;
+    margin-top: -40px;
+    text-align: center;
+}
+
+#map {
+    width: 350px;
+    height: 300px;
+    margin: 0 auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 3px solid var(--button-border-color);
+}
+
+#grundlegende-info {
+    width: 350px;
+    border: 1px solid var(--button-border-color);
+    border-radius: 15px;
+    background: var(--card-bg-color);
+    background-image: radial-gradient(at 88% 40%,
+            hsla(240, 15%, 9%, 0.1) 0px,
+            transparent 5%),
+        radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .5) 0px, transparent 50%),
+        radial-gradient(at 41% 4%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
+        radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
+}
+
+h2 {
+
+    padding: 15px;
+}
+
+p {
+    margin: 5px 0;
+}
+
+#hoehe {
+    padding-bottom: 25px;
+}
+
+#aktuelle-daten,
+.wrapper,
+#grundlegende-info {
+    display: none;
+}
+
+#stunden-container {
+    display: flex;
+    align-items: flex-start;
+    background: var(--card-bg-color);
+    border: 1px solid var(--button-border-color);
+    background-image: radial-gradient(at 88% 40%,
+            hsla(240, 15%, 9%, 0.1) 0px,
+            transparent 5%),
+        radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .5) 0px, transparent 50%),
+        radial-gradient(at 41% 4%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
+        radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-radius: 15px;
+}
+
+#y-axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 160px;
+    /* 80 Stufen * 2px */
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+#sliders-container {
+    padding-top: 20px;
+    display: flex;
+    gap: 4px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
+
+.slider-wrapper {
+    padding-top: 20px;
+    position: relative;
+    height: 160px;
+    width: 8px;
+    border: 1px solid var(--button-border-color);
+    display: flex;
+    flex-direction: column-reverse;
+    padding-top: 20px;
+}
+
+
+.extrahintergrund {
+    border: 1px solid var(--button-border-color);
+    height: 370px;
+    width: 350px;
+    border-radius: 15px;
+    background-image: radial-gradient(at 88% 40%,
+    hsla(240, 15%, 9%, 0.1) 0px,
+    transparent 5%),
+    radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .5) 0px, transparent 50%),
+    radial-gradient(at 41% 4%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
+    radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
+    animation: blob-bounce 5s infinite ease;
+    display: none; /* ❌ Unsichtbar beim Laden */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#diagramm-container {
+    width: 100%;
+    max-width: 350px;
+    height: 250px;
+    margin: 20px auto;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: none; /* ❌ Unsichtbar beim Laden */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+   
+}
+
+/* Stile für die einzelnen Diagramme */
+canvas {
+    width: 100%;
+    max-width: 350px;
+    background-color: rgba(0, 0, 0, 0.0); /* Leicht transparenter Hintergrund */
+    border-radius: 10px; /* Runde Ecken */
+    padding: 10px;
+    border: 0px solid #00bcd4; /* Rahmenfarbe */
+    transition: all 0.4s ease-in-out;
+}
+
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px 0;
+    background-color: var(--background-color);
+}
+
+.footer-text {
+    color: var(--status-color);
+    font-size: 14px;
+    margin-top: 10px;
+}
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
 /* Stile für das Diagramm-Container */
+#button-container button {
+   
+    font-size: 10px;
+   padding: 8px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+#button-container button:hover  {
+    background-color: var(--button-hover-bg);
+    color: var(--background-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: url('./assets/pointer.png') 10 5, pointer;
+}
 
+.active-button {
+    background-color: var(--button-hover-bg);
+    color: var(--background-color);
+}
 .extrahintergrund {
     margin-top: 20px;
     border: 1px solid var(--button-border-color);
-    height: 370px;
+    height: 440px;
     width: 350px;
     border-radius: 15px;
     background-image: radial-gradient(at 88% 40%,
