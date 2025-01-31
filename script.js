@@ -1,10 +1,14 @@
 const API_KEY = "dWL7n8jTc69tmrPmxxoNMfeaCUGJzKCR";
 
+let globalWetterDaten = null; // Globale Variable für spätere Nutzung
+
 document.getElementById("suchen").addEventListener("click", async () => {
     const stadt = document.getElementById("stadt-eingabe").value.trim();
     const status = document.getElementById("status");
     const extrahintergrund = document.querySelector(".extrahintergrund");
     const diagrammContainer = document.getElementById("diagramm-container");
+    const dailyExtrahintergrund = document.getElementById("daily-extrahintergrund"); // Neuer Bereich für die tägliche Vorhersage
+    const dailyDiagrammContainer = document.getElementById("daily-diagramm-container");
 
     if (!stadt) {
         status.textContent = "Bitte eine Stadt eingeben!";
@@ -12,25 +16,35 @@ document.getElementById("suchen").addEventListener("click", async () => {
     }
 
     status.textContent = "Lade Wetterdaten...";
-    
+
     try {
         const koords = await holeKoordinaten(stadt);
         if (!koords) throw new Error("Ort nicht gefunden.");
-        
+
         const wetterDaten = await ladeWetterDaten(koords.lat, koords.lon);
+        globalWetterDaten = wetterDaten; // Wetterdaten global speichern
+
         status.textContent = "";
 
-        // 🎯 Erst jetzt Hintergrund & Diagramm sichtbar machen!
+        // 🎯 Beide Bereiche sichtbar machen!
         extrahintergrund.style.display = "block";
         diagrammContainer.style.display = "block";
+        dailyExtrahintergrund.style.display = "block";
+        dailyDiagrammContainer.style.display = "block";
 
         // 🎨 Langsam einblenden für bessere Optik
         setTimeout(() => {
             extrahintergrund.style.opacity = "1";
             diagrammContainer.style.opacity = "1";
+            dailyExtrahintergrund.style.opacity = "1";
+            dailyDiagrammContainer.style.opacity = "1";
         }, 50);
 
-        zeigeStundenDiagramme(wetterDaten);
+        // 🔥 Diagramme aktualisieren
+        zeigeStundenDiagramme(globalWetterDaten); // 24h-Vorhersage
+        zeigeDailyStundenDiagramme(globalWetterDaten); // 7-Tage-Vorhersage
+        erstelleDailyButtons(globalWetterDaten); // Buttons für einzelne Tage
+
     } catch (error) {
         status.textContent = `Fehler: ${error.message}`;
     }
@@ -51,8 +65,6 @@ async function ladeWetterDaten(lat, lon) {
 }
 
 
-
-
 function zeigeDiagramm(chartId) {
     // Alle Diagramme verstecken
     const charts = [
@@ -60,7 +72,7 @@ function zeigeDiagramm(chartId) {
         "windChart", "boeenChart", "humidityChart", "uvIndexChart", "pressureChart",
         "cloudCoverChart", "visibilityChart"
     ];
-    
+
     charts.forEach(id => {
         const chartElement = document.getElementById(id);
         if (chartElement) {
@@ -76,8 +88,8 @@ function zeigeDiagramm(chartId) {
 
     // Alle Buttons zurücksetzen
     const buttons = [
-        "tempButton", "appTempButton", "regenButton", "precipProbability", 
-        "windButton", "boeenButton", "humidity", "uvIndexButton", "pressure", 
+        "tempButton", "appTempButton", "regenButton", "precipProbability",
+        "windButton", "boeenButton", "humidity", "uvIndexButton", "pressure",
         "cloudCover", "visibilityButton"
     ];
 
@@ -142,13 +154,13 @@ function erstelleDiagramm(canvasId, label, labels, daten, farbe) {
                 }
             },
             scales: {
-                x: { 
-                    title: { display: true, text: "Uhrzeit", color: "#00bcd4", font: { size: 14 }},
+                x: {
+                    title: { display: true, text: "Uhrzeit", color: "#00bcd4", font: { size: 14 } },
                     ticks: { color: "#00bcd4" },
                     grid: { color: "rgba(0, 188, 212, 0.25)" } // 🌟 Gitternetzlinien auf 50% #00bcd4 setzen
                 },
-                y: { 
-                    title: { display: true, text: label, color: "#00bcd4", font: { size: 14 }},
+                y: {
+                    title: { display: true, text: label, color: "#00bcd4", font: { size: 14 } },
                     ticks: { color: "#00bcd4" },
                     grid: { color: "rgba(0, 188, 212, 0.25)" } // 🌟 Auch Y-Achse mit 50% Transparenz
                 }
@@ -160,7 +172,7 @@ function erstelleDiagramm(canvasId, label, labels, daten, farbe) {
 function zeigeStundenDiagramme(daten) {
     const stunden = daten.hourly.data.slice(0, 24);
     const labels = stunden.map(stunde => new Date(stunde.time * 1000).getHours() + " Uhr");
-    
+
     const temperaturen = stunden.map(stunde => ((stunde.temperature - 32) * 5 / 9).toFixed(2));
     const gefuehlteTemperatur = stunden.map(stunde => ((stunde.apparentTemperature - 32) * 5 / 9).toFixed(2));
     const niederschlag = stunden.map(stunde => stunde.precipIntensity.toFixed(2));
@@ -172,7 +184,7 @@ function zeigeStundenDiagramme(daten) {
     const luftdruck = stunden.map(stunde => stunde.pressure.toFixed(2));
     const wolkenbedeckung = stunden.map(stunde => (stunde.cloudCover * 100).toFixed(2));
     const sichtweite = stunden.map(stunde => stunde.visibility.toFixed(2));
-    
+
     erstelleDiagramm("temperaturChart", "Temperatur (°C)", labels, temperaturen, "#00bcd4");
     erstelleDiagramm("appTempChart", "Gefühlte Temperatur (°C)", labels, gefuehlteTemperatur, "#00bcd4");
     erstelleDiagramm("niederschlagChart", "Niederschlag (mm/h)", labels, niederschlag, "#2196F3");
@@ -209,3 +221,113 @@ Object.keys(buttonChartMap).forEach(buttonId => {
 
 
 
+function zeigeDailyDiagramm(chartId) {
+    // Alle täglichen Diagramme verstecken
+    const dailyCharts = [
+        "dailyTempChart", "dailyAppTempChart", "dailyNiederschlagChart", "dailyPrecipProbabilityChart",
+        "dailyWindChart", "dailyBoeenChart", "dailyHumidityChart", "dailyUvIndexChart", "dailyPressureChart",
+        "dailyCloudCoverChart", "dailyVisibilityChart"
+    ];
+    
+    dailyCharts.forEach(id => {
+        const chartElement = document.getElementById(id);
+        if (chartElement) {
+            chartElement.style.display = "none";
+        }
+    });
+
+    // Gewünschtes tägliches Diagramm anzeigen
+    const activeChart = document.getElementById(chartId);
+    if (activeChart) {
+        activeChart.style.display = "block";
+    }
+
+    // Alle täglichen Buttons zurücksetzen
+    const dailyButtons = [
+        "dailyTempButton", "dailyAppTempButton", "dailyRegenButton", "dailyPrecipProbability", 
+        "dailyWindButton", "dailyBoeenButton", "dailyHumidity", "dailyUvIndexButton", "dailyPressure", 
+        "dailyCloudCover", "dailyVisibilityButton"
+    ];
+
+    dailyButtons.forEach(btnId => {
+        const btnElement = document.getElementById(btnId);
+        if (btnElement) {
+            btnElement.classList.remove("active-button");
+        }
+    });
+
+    // Passenden täglichen Button aktivieren
+    const activeDailyButtonMap = {
+        "dailyTempChart": "dailyTempButton",
+        "dailyAppTempChart": "dailyAppTempButton",
+        "dailyNiederschlagChart": "dailyRegenButton",
+        "dailyPrecipProbabilityChart": "dailyPrecipProbability",
+        "dailyWindChart": "dailyWindButton",
+        "dailyBoeenChart": "dailyBoeenButton",
+        "dailyHumidityChart": "dailyHumidity",
+        "dailyUvIndexChart": "dailyUvIndexButton",
+        "dailyPressureChart": "dailyPressure",
+        "dailyCloudCoverChart": "dailyCloudCover",
+        "dailyVisibilityChart": "dailyVisibilityButton"
+    };
+
+    if (activeDailyButtonMap[chartId]) {
+        document.getElementById(activeDailyButtonMap[chartId]).classList.add("active-button");
+    }
+}
+
+// Event-Listener für die täglichen Buttons
+const dailyButtonChartMap = {
+    "dailyTempButton": "dailyTempChart",
+    "dailyAppTempButton": "dailyAppTempChart",
+    "dailyRegenButton": "dailyNiederschlagChart",
+    "dailyPrecipProbability": "dailyPrecipProbabilityChart",
+    "dailyWindButton": "dailyWindChart",
+    "dailyBoeenButton": "dailyBoeenChart",
+    "dailyHumidity": "dailyHumidityChart",
+    "dailyUvIndexButton": "dailyUvIndexChart",
+    "dailyPressure": "dailyPressureChart",
+    "dailyCloudCover": "dailyCloudCoverChart",
+    "dailyVisibilityButton": "dailyVisibilityChart"
+};
+
+Object.keys(dailyButtonChartMap).forEach(buttonId => {
+    const buttonElement = document.getElementById(buttonId);
+    if (buttonElement) {
+        buttonElement.addEventListener("click", () => zeigeDailyDiagramm(dailyButtonChartMap[buttonId]));
+    }
+});
+
+function zeigeDailyStundenDiagramme(daten) {
+    if (!daten || !daten.daily || !daten.daily.data) {
+        console.error("Fehler: Wetterdaten für die täglichen Diagramme fehlen.");
+        return;
+    }
+
+    const tage = daten.daily.data.slice(0, 7);
+    const labels = tage.map(tag => new Date(tag.time * 1000).toLocaleDateString("de-DE", { weekday: "long" }));
+
+    const maxTemp = tage.map(tag => ((tag.temperatureHigh - 32) * 5 / 9).toFixed(2));
+    const minTemp = tage.map(tag => ((tag.temperatureLow - 32) * 5 / 9).toFixed(2));
+    const regenwahrscheinlichkeit = tage.map(tag => (tag.precipProbability * 100).toFixed(2));
+    const windgeschwindigkeit = tage.map(tag => tag.windSpeed.toFixed(2));
+
+    erstelleDiagramm("dailyTempChart", "Max. Temperatur (°C)", labels, maxTemp, "#00bcd4");
+    erstelleDiagramm("dailyAppTempChart", "Min. Temperatur (°C)", labels, minTemp, "#ff9800");
+    erstelleDiagramm("dailyPrecipProbabilityChart", "Regenwahrscheinlichkeit (%)", labels, regenwahrscheinlichkeit, "#2196F3");
+    erstelleDiagramm("dailyWindChart", "Windgeschwindigkeit (m/s)", labels, windgeschwindigkeit, "#9C27B0");
+}
+
+Object.keys(dailyButtonChartMap).forEach(buttonId => {
+    const buttonElement = document.getElementById(buttonId);
+    if (buttonElement) {
+        buttonElement.addEventListener("click", () => zeigeDailyDiagramm(dailyButtonChartMap[buttonId]));
+    }
+});
+document.getElementById("extrahintergrund").style.display = "block";
+document.getElementById("daily-extrahintergrund").style.display = "block";
+
+setTimeout(() => {
+    document.getElementById("extrahintergrund").style.opacity = "1";
+    document.getElementById("daily-extrahintergrund").style.opacity = "1";
+}, 50);

@@ -455,48 +455,6 @@ p {
 }
 
 
-.extrahintergrund {
-    border: 1px solid var(--button-border-color);
-    height: 370px;
-    width: 350px;
-    border-radius: 15px;
-    background-image: radial-gradient(at 88% 40%,
-    hsla(240, 15%, 9%, 0.1) 0px,
-    transparent 5%),
-    radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .5) 0px, transparent 50%),
-    radial-gradient(at 41% 4%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
-    radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
-    animation: blob-bounce 5s infinite ease;
-    display: none; /* ❌ Unsichtbar beim Laden */
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
-
-#diagramm-container {
-    width: 100%;
-    max-width: 350px;
-    height: 250px;
-    margin: 20px auto;
-    text-align: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    display: none; /* ❌ Unsichtbar beim Laden */
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-   
-}
-
-/* Stile für die einzelnen Diagramme */
-canvas {
-    width: 100%;
-    max-width: 350px;
-    background-color: rgba(0, 0, 0, 0.0); /* Leicht transparenter Hintergrund */
-    border-radius: 10px; /* Runde Ecken */
-    padding: 10px;
-    border: 0px solid #00bcd4; /* Rahmenfarbe */
-    transition: all 0.4s ease-in-out;
-}
-
 
 .footer {
     text-align: center;
@@ -510,49 +468,119 @@ canvas {
     font-size: 14px;
     margin-top: 10px;
 }
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.5s ease;
+
+#button-container {
+    display: flex;
+    flex-wrap: wrap;
+    
+    width: 100%; 
+   
 }
 /* Stile für das Diagramm-Container */
 #button-container button {
-   
-    font-size: 10px;
-   padding: 8px;
-    margin-bottom: 12px;
+    border-radius: 0px;
+    font-size: 11px;
+    padding: 8px;
+margin: 4px;
     text-align: center;
+    flex: 1 1 calc(100% / 2 - 4px); /* 2 Spalten, mit kleinem Abstand */
+    max-width: calc(100% / 2 - 4px); /* Sicherstellen, dass die Buttons nicht zu groß werden */
+    margin: 2px; /* Optional: Abstand anpassen */
 }
-#button-container button:hover  {
+
+#button-container button:hover {
     background-color: var(--button-hover-bg);
+
     color: var(--background-color);
     transition: background-color 0.3s ease, color 0.3s ease;
     cursor: url('./assets/pointer.png') 10 5, pointer;
 }
 
+#tempButton{
+    border-radius: 7px 0px 0px 0px !important;
+    }
+
+    #appTempButton{
+        border-radius: 0px 7px 0px 0px !important;
+    }
+    #pressure{
+        border-radius: 0px 0px 0px 7px !important;
+    }
+    #visibilityButton{
+        border-radius: 0px 0px 7px 0px !important;
+    }
+
+#visibilityButton{}
+
+
 .active-button {
     background-color: var(--button-hover-bg);
     color: var(--background-color);
 }
+
 .extrahintergrund {
     margin-top: 20px;
     border: 1px solid var(--button-border-color);
-    height: 440px;
+    height: 455px;
     width: 350px;
     border-radius: 15px;
     background-image: radial-gradient(at 88% 40%,
-    hsla(240, 15%, 9%, 0.1) 0px,
-    transparent 5%),
-    radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .5) 0px, transparent 50%),
-    radial-gradient(at 41% 4%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
-    radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
+            hsla(240, 15%, 9%, 0.1) 0px,
+            transparent 5%),
+        radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .5) 0px, transparent 50%),
+        radial-gradient(at 41% 4%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
+        radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
     animation: blob-bounce 5s infinite ease;
-    display: none; /* ❌ Unsichtbar beim Laden */
+    display: none;
+    /* ❌ Unsichtbar beim Laden */
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
 
 #diagramm-container {
+    padding-top: 20px;
+    width: 100%;
+    max-width: 350px;
+    height: 250px;
+
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: none;
+    /* ❌ Unsichtbar beim Laden */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+
+}
+
+/* Stile für die einzelnen Diagramme */
+canvas {
+    width: 100%;
+    max-width: 350px;
+    background-color: rgba(0, 0, 0, 0.0);
+    /* Leicht transparenter Hintergrund */
+    border-radius: 10px;
+    /* Runde Ecken */
+    padding: 10px;
+    border: 0px solid #00bcd4;
+    /* Rahmenfarbe */
+    transition: all 0.4s ease-in-out;
+}
+
+#daily-extrahintergrund {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#daily-extrahintergrund {
+    display: block !important;
+    /* Erzwingt die Sichtbarkeit */
+    opacity: 1 !important;
+    /* Stellt sicher, dass es sichtbar wird */
+}
+
+#daily-diagramm-container {
     width: 100%;
     max-width: 350px;
     height: 250px;
@@ -560,19 +588,9 @@ canvas {
     text-align: center;
     padding-left: 10px;
     padding-right: 10px;
-    display: none; /* ❌ Unsichtbar beim Laden */
+    display: none;
+    /* ❌ Unsichtbar beim Laden */
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
-   
-}
 
-/* Stile für die einzelnen Diagramme */
-canvas {
-    width: 100%;
-    max-width: 350px;
-    background-color: rgba(0, 0, 0, 0.0); /* Leicht transparenter Hintergrund */
-    border-radius: 10px; /* Runde Ecken */
-    padding: 10px;
-    border: 0px solid #00bcd4; /* Rahmenfarbe */
-    transition: all 0.4s ease-in-out;
 }

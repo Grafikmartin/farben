@@ -49,7 +49,7 @@
         <p id="status" class="laden">Gib zuerst den Ort an</p>
     </div>
 
-    <div class="extrahintergrund">
+    <div class="extrahintergrund" style="display: none;"> 
         <div id="diagramm-container">
             <h3>Die nächsten 24 Stunden:</h3>
             <canvas id="temperaturChart"></canvas>
@@ -66,20 +66,46 @@
             <div id="button-container">
                 <button id="tempButton">Temperatur</button>
                 <button id="appTempButton">gefühlte Temperatur</button>
-                <button id="regenButton">Regen</button>
                 <button id="precipProbability">Regenwahrscheinlichkeit</button>
-                <button id="cloudCover">Wolken</button>
+                <button id="regenButton">Regen</button>
+                <button id="cloudCover">Wolkenbedeckung</button>
                 <button id="windButton">Wind</button>
                 <button id="boeenButton">Böen</button>
                 <button id="humidity">Luftfeuchtigkeit</button>
-                <button id="uvIndexButton">UV-Index</button>
                 <button id="pressure">Luftdruck</button>
-               
                 <button id="visibilityButton">Sichtweite</button>
             </div>
         </div>
     </div>
-
+    <div class="extrahintergrund" id="daily-extrahintergrund" style="display: none;">
+        <div id="daily-diagramm-container">
+            <h3>Die nächsten 7 Tage:</h3>
+            <canvas id="dailyTempChart"></canvas>
+            <canvas id="dailyAppTempChart" style="display: none;"></canvas>
+            <canvas id="dailyNiederschlagChart" style="display: none;"></canvas>
+            <canvas id="dailyPrecipProbabilityChart" style="display: none;"></canvas>
+            <canvas id="dailyWindChart" style="display: none;"></canvas>
+            <canvas id="dailyBoeenChart" style="display: none;"></canvas>
+            <canvas id="dailyHumidityChart" style="display: none;"></canvas>
+            <canvas id="dailyUvIndexChart" style="display: none;"></canvas>
+            <canvas id="dailyPressureChart" style="display: none;"></canvas>
+            <canvas id="dailyCloudCoverChart" style="display: none;"></canvas>
+            <canvas id="dailyVisibilityChart" style="display: none;"></canvas>
+            <div id="daily-button-container">
+                <button id="dailyTempButton">Temperatur</button>
+                <button id="dailyAppTempButton">gefühlte Temperatur</button>
+                <button id="dailyRegenButton">Regen</button>
+                <button id="dailyPrecipProbability">Regenwahrscheinlichkeit</button>
+                <button id="dailyCloudCover">Wolken</button>
+                <button id="dailyWindButton">Wind</button>
+                <button id="dailyBoeenButton">Böen</button>
+                <button id="dailyHumidity">Luftfeuchtigkeit</button>
+                <button id="dailyUvIndexButton">UV-Index</button>
+                <button id="dailyPressure">Luftdruck</button>
+                <button id="dailyVisibilityButton">Sichtweite</button>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
