@@ -2,6 +2,30 @@ const API_KEY = "dWL7n8jTc69tmrPmxxoNMfeaCUGJzKCR";
 
 let globalWetterDaten = null; // Globale Variable für spätere Nutzung
 
+
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+const exitFullscreenBtn = document.getElementById('exit-fullscreen-btn');
+
+fullscreenBtn.addEventListener('click', () => {
+    if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+    }
+    fullscreenBtn.classList.add('hidden');
+    exitFullscreenBtn.classList.remove('hidden');
+});
+
+exitFullscreenBtn.addEventListener('click', () => {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    }
+    exitFullscreenBtn.classList.add('hidden');
+    fullscreenBtn.classList.remove('hidden');
+});
+document.getElementById('refresh-btn').addEventListener('click', function () {
+
+    location.reload();
+});
+
 document.getElementById("suchen").addEventListener("click", async () => {
     const stadt = document.getElementById("stadt-eingabe").value.trim();
     const status = document.getElementById("status");

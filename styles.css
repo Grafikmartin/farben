@@ -7,7 +7,7 @@
     --card-bg-color: rgba(0, 0, 0, 0.5);
     --wetterIcon-color: #00bcd4;
     --button-hover-bg: #00bcd4;
-    --button-hover-text: white;
+    --button-hover-text: rgb(0, 0, 0);
     --icon-color: #ffffff;
 }
 
@@ -33,7 +33,6 @@ body {
 button,
 a {
     cursor: url('./assets/pointer.png') 10 5, pointer;
-    /* Froschhand für Pointer */
 }
 
 button,
@@ -533,9 +532,6 @@ p {
     /* ❌ Unsichtbar beim Laden */
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
-    display: block !important;
-    opacity: 1 !important;
-
 }
 
 
