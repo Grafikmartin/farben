@@ -34,12 +34,59 @@ document.getElementById('refresh-btn').addEventListener('click', function () {
             document.getElementById("suchen").click();
         }
     });
+
+async function holeKoordinaten(stadt, plz, land) {
+    const params = new URLSearchParams({ city: stadt, format: "json", limit: 1 });
+    if (plz) params.append("postalcode", plz);
+    if (land) params.append("country", land);
+
+    const response = await fetch(`https://nominatim.openstreetmap.org/search?${params.toString()}`);
+    if (!response.ok) throw new Error("Fehler beim Abrufen der Ortskoordinaten.");
+    const daten = await response.json();
+
+    if (daten.length === 0) return null;
+    return { lat: daten[0].lat, lon: daten[0].lon };
+}
+
+// Funktion zur Anzeige der Karte
+let map; // Globale Variable für die Karte
+
+function initMap(lat, lon) {
+    const mapContainer = document.getElementById("map-container");
+    const mapElement = document.getElementById("map");
+
+    // Zeige den Map-Container an
+    if (mapContainer) mapContainer.style.display = "block";
+    if (mapElement) mapElement.style.display = "block";
+
+    // Falls eine alte Karte existiert, entferne sie
+    if (map) {
+        map.remove();
+    }
+
+    // Erstelle eine neue Leaflet-Karte
+    map = L.map('map').setView([lat, lon], 10);
+
+    // OpenStreetMap-Tiles hinzufügen
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Marker setzen
+    L.marker([lat, lon]).addTo(map)
+        .bindPopup('Gewählter Ort')
+        .openPopup();
+}
+
+
 document.getElementById("suchen").addEventListener("click", async () => {
     const stadt = document.getElementById("stadt-eingabe").value.trim();
+    const plz = document.getElementById("plz-eingabe").value.trim();
+    const land = document.getElementById("land-eingabe").value.trim();
     const status = document.getElementById("status");
     const extrahintergrund = document.querySelector(".extrahintergrund");
     const diagrammContainer = document.getElementById("diagramm-container");
-    const dailyExtrahintergrund = document.getElementById("daily-extrahintergrund"); // Neuer Bereich für die tägliche Vorhersage
+    const dailyExtrahintergrund = document.getElementById("daily-extrahintergrund"); 
     const dailyDiagrammContainer = document.getElementById("daily-diagramm-container");
 
     if (!stadt) {
@@ -52,13 +99,17 @@ document.getElementById("suchen").addEventListener("click", async () => {
     try {
         const koords = await holeKoordinaten(stadt);
         if (!koords) throw new Error("Ort nicht gefunden.");
+        
+        initMap(koords.lat, koords.lon);
 
         const wetterDaten = await ladeWetterDaten(koords.lat, koords.lon);
         globalWetterDaten = wetterDaten; // Wetterdaten global speichern
 
         status.textContent = "";
+        zeigeGrundlegendeInfo(globalWetterDaten);  
 
         // 🎯 Beide Bereiche sichtbar machen!
+        document.getElementById("grundlegende-info").style.display = "block";
         extrahintergrund.style.display = "block";
         diagrammContainer.style.display = "block";
         dailyExtrahintergrund.style.display = "block";
@@ -96,6 +147,23 @@ async function ladeWetterDaten(lat, lon) {
     return await response.json();
 }
 
+function zeigeGrundlegendeInfo(daten) {
+    const timezone = daten.timezone; // Zeitzone des Orts
+    const unixTimestamp = daten.currently.time; // Aktuelle Zeit als Unix-Zeitstempel
+
+    // Ortszeit berechnen
+    const ortszeit = new Date(unixTimestamp * 1000).toLocaleString("de-DE", {
+        timeZone: timezone,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+    });
+
+    document.getElementById("koordinaten").textContent = `Koordinaten: ${daten.latitude}, ${daten.longitude}`;
+    document.getElementById("zeitzone").textContent = `Zeitzone: ${timezone}`;
+    document.getElementById("hoehe").textContent = `Höhe: ${(daten.elevation / 3.28084).toFixed(2)} Meter`;
+    document.getElementById("ortszeit").textContent = `Ortszeit: ${ortszeit}`;
+}
 
 function zeigeDiagramm(chartId) {
     // Alle Diagramme verstecken

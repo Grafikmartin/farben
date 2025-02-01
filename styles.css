@@ -45,18 +45,7 @@ html {
     scroll-behavior: smooth;
 }
 
-.container {
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    /* Text zentrieren */
-    width: auto;
-    max-width: 800px;
-    overflow-x: hidden;
-
-}
 
 .top-bar {
     display: flex;
@@ -89,6 +78,18 @@ html {
 
 .hidden {
     display: none;
+}
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    /* Text zentrieren */
+    width: auto;
+    max-width: 800px;
+    overflow-x: hidden;
 }
 
 .logo {
@@ -133,9 +134,9 @@ h1 {
 
 input,
 button {
-    margin: 5px;
+   
     padding: 10px;
-    font-size: 16px;
+    font-size: 12px;
     border: 1px solid var(--button-border-color);
     border-radius: 20px;
     background-color: black;
@@ -365,6 +366,7 @@ input:focus {
 }
 
 #map {
+    margin-top: 50px;
     width: 350px;
     height: 300px;
     margin: 0 auto;
@@ -372,7 +374,19 @@ input:focus {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 3px solid var(--button-border-color);
 }
-
+.grundInfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text-color);
+    border-radius: 15px;
+    padding: 10px;
+    padding-top: 15px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
 #grundlegende-info {
     width: 350px;
     border: 1px solid var(--button-border-color);
@@ -386,12 +400,8 @@ input:focus {
         radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
 }
 
-h2 {
-
-    padding: 15px;
-}
-
 p {
+    font-size: 12px;
     margin: 5px 0;
 }
 
