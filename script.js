@@ -25,7 +25,15 @@ document.getElementById('refresh-btn').addEventListener('click', function () {
 
     location.reload();
 });
+    // Enter funktioniert jetzt nach Ortsangabe
 
+    const stadtEingabe = document.getElementById("stadt-eingabe");
+    stadtEingabe.addEventListener('keypress', function (event) {
+    
+        if (event.keyCode === 13) {
+            document.getElementById("suchen").click();
+        }
+    });
 document.getElementById("suchen").addEventListener("click", async () => {
     const stadt = document.getElementById("stadt-eingabe").value.trim();
     const status = document.getElementById("status");
