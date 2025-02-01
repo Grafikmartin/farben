@@ -43,7 +43,7 @@ document.getElementById("suchen").addEventListener("click", async () => {
         // 🔥 Diagramme aktualisieren
         zeigeStundenDiagramme(globalWetterDaten); // 24h-Vorhersage
         zeigeDailyStundenDiagramme(globalWetterDaten); // 7-Tage-Vorhersage
-        erstelleDailyButtons(globalWetterDaten); // Buttons für einzelne Tage
+        erstelleDailyButtons(); // Buttons für einzelne Tage
 
     } catch (error) {
         status.textContent = `Fehler: ${error.message}`;
@@ -185,17 +185,17 @@ function zeigeStundenDiagramme(daten) {
     const wolkenbedeckung = stunden.map(stunde => (stunde.cloudCover * 100).toFixed(2));
     const sichtweite = stunden.map(stunde => stunde.visibility.toFixed(2));
 
-    erstelleDiagramm("temperaturChart", "Temperatur (°C)", labels, temperaturen, "#00bcd4");
-    erstelleDiagramm("appTempChart", "Gefühlte Temperatur (°C)", labels, gefuehlteTemperatur, "#00bcd4");
-    erstelleDiagramm("niederschlagChart", "Niederschlag (mm/h)", labels, niederschlag, "#2196F3");
-    erstelleDiagramm("precipProbabilityChart", "Regenwahrscheinlichkeit (%)", labels, regenwahrscheinlichkeit, "#00bcd4");
-    erstelleDiagramm("windChart", "Windgeschwindigkeit (m/s)", labels, windgeschwindigkeit, "#00bcd4");
-    erstelleDiagramm("boeenChart", "Böen (m/s)", labels, boeen, "#00bcd4");
-    erstelleDiagramm("humidityChart", "Luftfeuchtigkeit (%)", labels, luftfeuchtigkeit, "#00bcd4");
-    erstelleDiagramm("uvIndexChart", "UV-Index", labels, uvIndex, "#00bcd4");
-    erstelleDiagramm("pressureChart", "Luftdruck (hPa)", labels, luftdruck, "#00bcd4");
-    erstelleDiagramm("cloudCoverChart", "Wolkenbedeckung (%)", labels, wolkenbedeckung, "#00bcd4");
-    erstelleDiagramm("visibilityChart", "Sichtweite (km)", labels, sichtweite, "#00bcd4");
+    erstelleDiagramm("temperaturChart", "Temperatur (°C)", labels, temperaturen, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("appTempChart", "Gefühlte Temperatur (°C)", labels, gefuehlteTemperatur, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("niederschlagChart", "Niederschlag (mm/h)", labels, niederschlag, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("precipProbabilityChart", "Regenwahrscheinlichkeit (%)", labels, regenwahrscheinlichkeit, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("windChart", "Windgeschwindigkeit (m/s)", labels, windgeschwindigkeit, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("boeenChart", "Böen (m/s)", labels, boeen, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("humidityChart", "Luftfeuchtigkeit (%)", labels, luftfeuchtigkeit, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("uvIndexChart", "UV-Index", labels, uvIndex, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("pressureChart", "Luftdruck (hPa)", labels, luftdruck, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("cloudCoverChart", "Wolkenbedeckung (%)", labels, wolkenbedeckung, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("visibilityChart", "Sichtweite (km)", labels, sichtweite, "rgba(0, 188, 212, 0.9)");
 }
 
 const buttonChartMap = {
@@ -278,14 +278,13 @@ function zeigeDailyDiagramm(chartId) {
 
 // Event-Listener für die täglichen Buttons
 const dailyButtonChartMap = {
-    "dailyTempButton": "dailyTempChart",
+"dailyTempButton": "dailyTempChart",
     "dailyAppTempButton": "dailyAppTempChart",
-    "dailyRegenButton": "dailyNiederschlagChart",
+    "dailyRegenButton": "dailyNiederschlagChart", 
     "dailyPrecipProbability": "dailyPrecipProbabilityChart",
     "dailyWindButton": "dailyWindChart",
     "dailyBoeenButton": "dailyBoeenChart",
     "dailyHumidity": "dailyHumidityChart",
-    "dailyUvIndexButton": "dailyUvIndexChart",
     "dailyPressure": "dailyPressureChart",
     "dailyCloudCover": "dailyCloudCoverChart",
     "dailyVisibilityButton": "dailyVisibilityChart"
@@ -307,23 +306,38 @@ function zeigeDailyStundenDiagramme(daten) {
     const tage = daten.daily.data.slice(0, 7);
     const labels = tage.map(tag => new Date(tag.time * 1000).toLocaleDateString("de-DE", { weekday: "long" }));
 
+
     const maxTemp = tage.map(tag => ((tag.temperatureHigh - 32) * 5 / 9).toFixed(2));
     const minTemp = tage.map(tag => ((tag.temperatureLow - 32) * 5 / 9).toFixed(2));
     const regenwahrscheinlichkeit = tage.map(tag => (tag.precipProbability * 100).toFixed(2));
+    const niederschlagsintensität = tage.map(tag => (tag.precipIntensity ? tag.precipIntensity.toFixed(2) : "0"));
     const windgeschwindigkeit = tage.map(tag => tag.windSpeed.toFixed(2));
+    const boeen = tage.map(tag => (tag.windGust ? tag.windGust.toFixed(2) : "0"));
+    const luftfeuchtigkeit = tage.map(tag => (tag.humidity ? (tag.humidity * 100).toFixed(2) : "0"));
+    const luftdruck = tage.map(tag => (tag.pressure ? tag.pressure.toFixed(2) : "0"));
+    const wolkenbedeckung = tage.map(tag => (tag.cloudCover ? (tag.cloudCover * 100).toFixed(2) : "0"));
+    const sichtweite = tage.map(tag => (tag.visibility ? tag.visibility.toFixed(2) : "0"));
 
-    erstelleDiagramm("dailyTempChart", "Max. Temperatur (°C)", labels, maxTemp, "#00bcd4");
-    erstelleDiagramm("dailyAppTempChart", "Min. Temperatur (°C)", labels, minTemp, "#ff9800");
-    erstelleDiagramm("dailyPrecipProbabilityChart", "Regenwahrscheinlichkeit (%)", labels, regenwahrscheinlichkeit, "#2196F3");
-    erstelleDiagramm("dailyWindChart", "Windgeschwindigkeit (m/s)", labels, windgeschwindigkeit, "#9C27B0");
+    erstelleDiagramm("dailyTempChart", "Max. Temperatur (°C)", labels, maxTemp, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("dailyAppTempChart", "Min. Temperatur (°C)", labels, minTemp, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("dailyPrecipProbabilityChart", "Regenwahrscheinlichkeit (%)", labels, regenwahrscheinlichkeit, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("dailyNiederschlagChart", "Niederschlagsintensität (mm/h)", labels, niederschlagsintensität, "rgba(0, 188, 212, 0.9)"); 
+    erstelleDiagramm("dailyWindChart", "Windgeschwindigkeit (m/s)", labels, windgeschwindigkeit, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("dailyBoeenChart", "Böen (m/s)", labels, boeen, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("dailyHumidityChart", "Luftfeuchtigkeit (%)", labels, luftfeuchtigkeit, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("dailyPressureChart", "Luftdruck (hPa)", labels, luftdruck, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("dailyCloudCoverChart", "Wolkenbedeckung (%)", labels, wolkenbedeckung, "rgba(0, 188, 212, 0.9)");
+    erstelleDiagramm("dailyVisibilityChart", "Sichtweite (km)", labels, sichtweite, "rgba(0, 188, 212, 0.9)");
 }
-
 Object.keys(dailyButtonChartMap).forEach(buttonId => {
     const buttonElement = document.getElementById(buttonId);
     if (buttonElement) {
         buttonElement.addEventListener("click", () => zeigeDailyDiagramm(dailyButtonChartMap[buttonId]));
+    } else {
+        console.warn(`Button mit ID '${buttonId}' nicht gefunden.`);
     }
 });
+
 document.getElementById("extrahintergrund").style.display = "block";
 document.getElementById("daily-extrahintergrund").style.display = "block";
 
@@ -331,3 +345,14 @@ setTimeout(() => {
     document.getElementById("extrahintergrund").style.opacity = "1";
     document.getElementById("daily-extrahintergrund").style.opacity = "1";
 }, 50);
+
+function erstelleDailyButtons() {
+    Object.keys(dailyButtonChartMap).forEach(buttonId => {
+        const buttonElement = document.getElementById(buttonId);
+        if (buttonElement) {
+            buttonElement.addEventListener("click", () => zeigeDailyDiagramm(dailyButtonChartMap[buttonId]));
+        } else {
+            console.warn(`⚠️ Warnung: Button mit ID '${buttonId}' nicht gefunden.`);
+        }
+    });
+}
