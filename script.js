@@ -106,9 +106,12 @@ document.getElementById("suchen").addEventListener("click", async () => {
         globalWetterDaten = wetterDaten; // Wetterdaten global speichern
 
         status.textContent = "";
+        zeigeAktuelleDaten(globalWetterDaten);
         zeigeGrundlegendeInfo(globalWetterDaten);  
 
         // 🎯 Beide Bereiche sichtbar machen!
+        document.getElementById("aktuelle-daten").style.display = "block";
+        document.querySelector(".wrapper").style.display = "flex";
         document.getElementById("grundlegende-info").style.display = "block";
         extrahintergrund.style.display = "block";
         diagrammContainer.style.display = "block";
@@ -133,6 +136,48 @@ document.getElementById("suchen").addEventListener("click", async () => {
     }
 });
 
+function zeigeAktuelleDaten(daten) {
+    const aktuell = daten.currently;
+    if (!aktuell) return;
+
+    // Temperatur mit 2 Grad Abzug und auf ganze Zahl gerundet
+    const temperaturCelsius = Math.round((aktuell.temperature - 32) * 5 / 9 - 3.5);
+
+    // Gefühlte Temperatur mit 2 Grad Abzug und auf ganze Zahl gerundet
+    const gefuehlteTemperaturCelsius = Math.round((aktuell.apparentTemperature - 32) * 5 / 9);
+
+    // Temperatur und Icon einfügen
+    document.getElementById("temperatur").textContent = `${temperaturCelsius} °C`;
+    document.getElementById("zusammenfassung").innerHTML = zeigeWetterIcon(aktuell.icon);
+
+    // Zusätzliche Wetterdetails für den Wrapper
+    document.getElementById("karte-gefuehlte-temperatur").innerHTML = `Gefühlte<br>Temperatur:${Math.round((aktuell.apparentTemperature - 32) * 5 / 9 - 3.5)} °C`;
+    document.getElementById("karte-luftfeuchtigkeit").innerHTML = `Luftfeuchtigkeit:<br>${Math.round(aktuell.humidity * 100)}%`;
+    document.getElementById("karte-luftdruck").innerHTML = `Luftdruck:<br>${Math.round(aktuell.pressure)} hPa`;
+    document.getElementById("karte-windgeschwindigkeit").innerHTML = `Windgeschwind-<br>igkeit:${Math.round(aktuell.windSpeed)} m/s`;
+    document.getElementById("karte-uv-index").innerHTML = `UV-Index:<br>${Math.round(aktuell.uvIndex)}`;
+    document.getElementById("karte-wolkendecke").innerHTML = `Wolkendecke:<br>${Math.round(aktuell.cloudCover * 100)}%`;
+    document.getElementById("karte-boeen").innerHTML = `Böen bis zu:<br>${Math.round(aktuell.windGust)} m/s`;
+    document.getElementById("karte-sichtweite").innerHTML = `Sichtweite:<br>${Math.round(aktuell.visibility)} m/s`;
+}
+
+function zeigeWetterIcon(zustand) {
+    const iconMap = {
+        "clear-day": "mdi-white-balance-sunny",
+        "clear-night": "mdi-weather-night",
+        "rain": "mdi-weather-rainy",
+        "snow": "mdi-weather-snowy",
+        "sleet": "mdi-weather-snowy-rainy",
+        "wind": "mdi-weather-windy",
+        "fog": "mdi-weather-fog",
+        "cloudy": "mdi-weather-cloudy",
+        "partly-cloudy-day": "mdi-weather-partly-cloudy",
+        "partly-cloudy-night": "mdi-weather-night-partly-cloudy"
+    };
+
+    const iconClass = iconMap[zustand] || "mdi-help"; // Fallback-Icon
+    return `<span class="mdi ${iconClass}"></span>`;
+}
 
 async function holeKoordinaten(stadt) {
     const response = await fetch(`https://nominatim.openstreetmap.org/search?city=${stadt}&format=json&limit=1`);

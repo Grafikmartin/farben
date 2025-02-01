@@ -228,7 +228,7 @@ input:focus {
 #stunden-daten,
 #tage-daten {
     margin-top: 20px;
-    width: 360px;
+    width: 350px;
     max-width: 500px;
 }
 
@@ -237,6 +237,7 @@ input:focus {
     justify-content: center;
     align-items: center;
     margin-top: 50px;
+   
 }
 
 #temp-card {
