@@ -155,7 +155,7 @@ function erstelleDiagramm(canvasId, label, labels, daten, farbe) {
             },
             scales: {
                 x: {
-                    title: { display: true, text: "Uhrzeit", color: "#00bcd4", font: { size: 14 } },
+                    title: { display: false, text: "Uhrzeit", color: "#00bcd4", font: { size: 14 } },
                     ticks: { color: "#00bcd4" },
                     grid: { color: "rgba(0, 188, 212, 0.25)" } // 🌟 Gitternetzlinien auf 50% #00bcd4 setzen
                 },

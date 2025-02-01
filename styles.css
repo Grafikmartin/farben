@@ -454,8 +454,6 @@ p {
     padding-top: 20px;
 }
 
-
-
 .footer {
     text-align: center;
     margin-top: 20px;
@@ -472,45 +470,45 @@ p {
 #button-container {
     display: flex;
     flex-wrap: wrap;
-    
-    width: 100%; 
-   
+    width: 100%;
 }
+
 /* Stile für das Diagramm-Container */
 #button-container button {
     border-radius: 0px;
     font-size: 11px;
     padding: 8px;
-margin: 4px;
+    margin: 4px;
     text-align: center;
-    flex: 1 1 calc(100% / 2 - 4px); /* 2 Spalten, mit kleinem Abstand */
-    max-width: calc(100% / 2 - 4px); /* Sicherstellen, dass die Buttons nicht zu groß werden */
-    margin: 2px; /* Optional: Abstand anpassen */
+    flex: 1 1 calc(100% / 2 - 4px);
+    max-width: calc(100% / 2 - 4px);
+    margin: 2px;
 }
 
 #button-container button:hover {
     background-color: var(--button-hover-bg);
-
     color: var(--background-color);
     transition: background-color 0.3s ease, color 0.3s ease;
     cursor: url('./assets/pointer.png') 10 5, pointer;
 }
 
-#tempButton{
+#tempButton {
     border-radius: 7px 0px 0px 0px !important;
-    }
+}
 
-    #appTempButton{
-        border-radius: 0px 7px 0px 0px !important;
-    }
-    #pressure{
-        border-radius: 0px 0px 0px 7px !important;
-    }
-    #visibilityButton{
-        border-radius: 0px 0px 7px 0px !important;
-    }
+#appTempButton {
+    border-radius: 0px 7px 0px 0px !important;
+}
 
-#visibilityButton{}
+#pressure {
+    border-radius: 0px 0px 0px 7px !important;
+}
+
+#visibilityButton {
+    border-radius: 0px 0px 7px 0px !important;
+}
+
+#visibilityButton {}
 
 
 .active-button {
@@ -521,7 +519,7 @@ margin: 4px;
 .extrahintergrund {
     margin-top: 20px;
     border: 1px solid var(--button-border-color);
-    height: 455px;
+    height: 453px;
     width: 350px;
     border-radius: 15px;
     background-image: radial-gradient(at 88% 40%,
@@ -535,7 +533,11 @@ margin: 4px;
     /* ❌ Unsichtbar beim Laden */
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
+    display: block !important;
+    opacity: 1 !important;
+
 }
+
 
 #diagramm-container {
     padding-top: 20px;
@@ -571,18 +573,21 @@ canvas {
     display: none;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
+    height: 473px;
 }
 
 #daily-extrahintergrund {
-    display: block !important;
-    /* Erzwingt die Sichtbarkeit */
-    opacity: 1 !important;
-    /* Stellt sicher, dass es sichtbar wird */
+    
+}
+#daily-button-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 #daily-diagramm-container {
     width: 100%;
-    max-width: 350px;
+    max-width: 380px;
     height: 250px;
     margin: 20px auto;
     text-align: center;
@@ -592,5 +597,37 @@ canvas {
     /* ❌ Unsichtbar beim Laden */
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
+}
 
+#daily-button-container button {
+    border-radius: 0px;
+    font-size: 11px;
+    padding: 8px;
+    margin: 4px;
+    text-align: center;
+    flex: 1 1 calc(100% / 2 - 4px);
+    max-width: calc(100% / 2 - 4px);
+    margin: 2px;
+}
+
+#daily-button-container button:hover {
+    background-color: var(--button-hover-bg);
+    color: var(--background-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: url('./assets/pointer.png') 10 5, pointer;
+}
+#dailyTempButton {
+    border-radius: 7px 0px 0px 0px !important;
+}
+
+#dailyAppTempButton {
+    border-radius: 0px 7px 0px 0px !important;
+}
+
+#dailyPressure {
+    border-radius: 0px 0px 0px 7px !important;
+}
+
+#dailyVisibilityButton {
+    border-radius: 0px 0px 7px 0px !important;
 }
