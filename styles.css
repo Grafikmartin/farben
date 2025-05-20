@@ -1,640 +1,197 @@
 :root {
-    --background-color: #000;
-    --text-color: #00bcd4;
-    --heading-color: #00bcd4;
-    --button-border-color: #00bcd4;
-    --status-color: #00bcd4;
-    --card-bg-color: rgba(0, 0, 0, 0.5);
-    --wetterIcon-color: #00bcd4;
-    --button-hover-bg: #00bcd4;
-    --button-hover-text: rgb(0, 0, 0);
-    --icon-color: #ffffff;
+    /* Primärfarben */
+    --primary-1: rgb(185, 90, 0);
+    /* Header / Footer / Button */
+    --primary-2: rgba(136, 197, 210, 0);
+    /* Card-Hintergrund */
+    --primary-3:  rgb(0, 51, 73);
+    /* Seitenhintergrund */
+
+    /* Themenfarben */
+    --color-science: rgba(52, 129, 97, 0.7);
+    --color-history: rgba(177, 75, 44, 0.7);
+    --color-geography: rgba(79, 104, 138, 0.9);
+    --color-culture: rgba(109, 51, 134, 0.7);
+    --color-media: rgba(173, 20, 87, 0.7);
+    --color-sports: rgba(10, 164, 202, 0.7);
+    --color-general: rgba(251, 193, 45, 0.7);
+
+    /* Hoverfarben */
+    --hover-button: 	rgb(72, 146, 214);
+    --hover-topic: brightness(0.9);
+
+    /* UI-spezifische Farben */
+    --color-button: var(--primary-1);
+    --color-input-bg: rgba(255, 255, 255,0.5);
+
+    /* Textfarben */
+    --color-text-light: rgb(255, 255, 255);
+    --color-text-dark: #212121;
+    --color-placeholder: rgba(121, 0, 0, 0.5);
+
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    vertical-align: middle;
     box-sizing: border-box;
 }
 
 body {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     margin: 0;
-    padding: 20px;
-    cursor: url('./assets/cursor.png') 10 5, auto;
-}
-
-button,
-a {
-    cursor: url('./assets/pointer.png') 10 5, pointer;
-}
-
-button,
-input,
-.bereich {
-    cursor: url('./assets/pointer.png') 10 5, pointer;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-
-
-.top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 90px;
-    color: var(--icon-color);
-    opacity: .25;
-}
-
-.top-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.icon-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--icon-color);
-    font-size: 24px;
-    transition: background-color 0.5s ease, transform 0.5s ease;
-    cursor: url('./assets/pointer.png') 10 5, pointer;
-}
-
-.icon-btn:hover {
-    opacity: 1;
-    transform: scale(1.1);
-}
-
-.hidden {
-    display: none;
-}
-
-
-.container {
+    font-family: sans-serif;
+    background-color: var(--primary-3);
+    color: var(--color-text-light);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    /* Text zentrieren */
-    width: auto;
-    max-width: 800px;
-    overflow-x: hidden;
+    min-height: 100vh;
+       background-image: radial-gradient(at 2% 0%, rgba(236, 249, 255, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(5, 43, 61, 0.1) 0px, transparent 40%),
+        radial-gradient(at 20% 4%, rgba(5, 43, 61, 0.1) 0px, transparent 60%),
+        radial-gradient(at 100% 30%, rgba(5, 43, 61, 0.1) 0px, transparent 50%);
 }
 
-.logo {
-    transform: scale(0.20);
+/* Header & Footer */
+.app-header,
+.app-footer {
+    background-color: var(--primary-1);
+    color: var(--color-text-light);
+    padding: 1rem;
+    text-align: center;
+       background-image: radial-gradient(at 2% 0%, rgba(255, 253, 236, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(42, 43, 7, 0.2) 0px, transparent 40%),
+        radial-gradient(at 20% 4%, rgba(128, 35, 35, 0.1) 0px, transparent 60%),
+        radial-gradient(at 100% 30%, rgba(41, 23, 9, 0.1) 0px, transparent 50%);
+}
+
+/* Hauptbereich */
+main {
+    flex: 1;
+    padding: 1rem;
+}
+
+/* Suchfeld-Bereich */
+.search-section {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.search-section label {
     display: block;
-    margin-bottom: -80px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-light);
 }
 
-h1,
-h2 {
-    color: var(--heading-color);
+.search-section input {
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    background-color: var(--color-input-bg);
+    color: var(--color-text-light);
 }
 
-h1 {
-    font-size: 2.7rem;
-    margin-bottom: 60px;
-}
-
-.hidden {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-/* Stil für sichtbare Abschnitte */
-.visible {
+.search-section input::placeholder {
+    color: var(--color-placeholder);
     opacity: 1;
-    transform: translateY(0);
+    /* für Firefox */
 }
 
-.laden {
-    animation: blinken 1.5s infinite;
-    /* Blinkanimation */
-    color: var(--status-color);
-}
-
-#status {
-    margin: 10px 0;
-    font-size: 14px;
-    color: var(--status-color);
-}
-
-input,
-button {
-   
-    padding: 10px;
-    font-size: 12px;
-    border: 1px solid var(--button-border-color);
-    border-radius: 20px;
-    background-color: black;
-    color: var(--text-color);
-    margin-bottom: 12px;
-    text-align: center;
-}
-
-#stadt-eingabe {
-    width: 200px;
-}
-
-#plz-eingabe {
-    width: 123px;
-    background-color: black;
-}
-
-#land-eingabe {
-    width: 200px;
-}
-
-#suchen {
-    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.6),
-        inset -3px -3px 5px rgba(0, 0, 0, 0.9);
-    width: 123px;
-    color: var(--button-border-color);
-    background-image: radial-gradient(at 88% 40%,
-            hsla(240, 15%, 9%, 0.1) 0px,
-            transparent 5%),
-        radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .25) 0px, transparent 50%),
-        radial-gradient(at 10% 4%, hsla(189, 97%, 36%, .25) 0px, transparent 50%),
-        radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .25) 0px, transparent 50%);
-}
-
-button {
-    cursor: pointer;
-    transition: background-color 1s ease, transform 0.5s ease;
-}
-
-#suchen:hover {
-    background-color: var(--button-hover-bg);
-    color: var(--background-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    cursor: url('./assets/pointer.png') 10 5, pointer;
-}
-
-input:focus,
-textarea:focus {
-    background-color: black;
-    color: var(--text-color);
-    border: 1px solid var(--button-border-color);
-}
-
-input:-webkit-autofill {
-    background-color: black !important;
-    color: var(--text-color) !important;
-    -webkit-text-fill-color: var(--text-color) !important;
-    box-shadow: 0 0 0px 1000px black inset !important;
-}
-
-/* Unterstützung für Firefox */
-input:-moz-autofill {
-    background-color: black !important;
-    color: var(--text-color) !important;
-}
-
-input:focus {
-    background-color: black;
-    color: var(--text-color);
-    border: 1px solid var(--button-border-color);
-}
-
-@keyframes blinken {
-
-    0%,
-    100% {
-        opacity: 1;
-        /* Volle Sichtbarkeit */
-    }
-
-    50% {
-        opacity: 0.5;
-        /* Halbtransparent */
-    }
-}
-
-#grundlegende-info,
-#aktuelle-daten,
-#stunden-daten,
-#tage-daten {
-    margin-top: 20px;
-    width: 350px;
-    max-width: 500px;
-}
-
-#aktuelle-daten {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 50px;
-   
-}
-
-#temp-card {
-    margin: 0 auto;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--card-bg-color);
-    border-radius: 15px;
-    padding: 10px;
-    backdrop-filter: blur(1px);
-    margin: 10px 0;
-    z-index: -100;
-    border: 1px solid var(--button-border-color);
-    background-image: radial-gradient(at 88% 40%,
-            hsla(240, 15%, 9%, 0.1) 0px,
-            transparent 5%),
-        radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .5) 0px, transparent 50%),
-        radial-gradient(at 41% 4%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
-        radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
-    animation: blob-bounce 5s infinite ease;
-}
-
-#temperatur {
-    vertical-align: middle;
-    font-size: 4.5rem;
-    color: var(--text-color);
-    margin-right: 10px;
-}
-
-
-.mdi {
-    font-size: 110px;
-    vertical-align: middle;
-    color: var(--wetterIcon-color);
-    margin-left: 20px;
-}
-
-.wrapper {
-    top: 36px;
+/* Themen-Grid */
+.card-container {
+    background-color: var(--primary-2);
+    padding: 1rem;
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
     width: 100%;
-    height: 100%;
-    position: relative;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    perspective: 1000px;
-    z-index: -4;
-    margin-bottom: 150px;
-}
-
-.inner {
-    --w: 120px;
-    --h: 15vh;
-    --translateZ: calc((var(--w) + var(--h)) * 0.75);
-    --rotateX: -15deg;
-    --perspective: 1000px;
-    position: absolute;
-    width: var(--w);
-    height: var(--h);
-    z-index: 2;
-    transform-style: preserve-3d;
-    transform: perspective(var(--perspective));
-    animation: rotating 20s linear infinite;
-    border-radius: 5px;
-}
-
-@keyframes rotating {
-    from {
-        transform: perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(0);
-    }
-
-    to {
-        transform: perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(-1turn);
-    }
-}
-
-.card {
-    position: absolute;
-    width: 100%;
-    height: 45px;
-    border-radius: 15px;
-    background-color: rgba(var(--color-card), 0.6);
-    transform: rotateY(calc((360deg / var(--quantity)) * var(--index))) translateZ(var(--translateZ));
-    box-shadow: 0 0vh 0px rgba(255, 255, 255, 0.9);
-    background-color: rgba(var(--color-card), 0.9);
-    border: 1px solid var(--button-border-color);
-    background-color: rgba(var(--color-card), 0.9);
-    background-image: radial-gradient(at 88% 40%,
-            hsla(240, 15%, 9%, 0.1) 0px,
-            transparent 5%),
-        radial-gradient(at 0% 0%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
-        radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
-    box-shadow: 0px -16px 24px 0px rgba(255, 255, 255, 0.15) inset;
-    backdrop-filter: blur(1px);
-}
-
-/* Karte individuell ansprechbar 
-.card:nth-child(1) {}
-.card:nth-child(2) {}
-.card:nth-child(3) {}
-.card:nth-child(4) {}
-.card:nth-child(5) {}
-.card:nth-child(6) {} 
-*/
-
-.Wetterdaten {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 0.65rem;
-    font-weight: bold;
-    color: var(--text-color);
-    border-radius: 15px;
-    padding: 10px;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-}
-
-#map-container {
-    display: none;
-    margin-top: -40px;
-    text-align: center;
-}
-
-#map {
-    margin-top: 50px;
-    width: 350px;
-    height: 300px;
-    margin: 0 auto;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 3px solid var(--button-border-color);
-}
-.grundInfo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--text-color);
-    border-radius: 15px;
-    padding: 10px;
-    padding-top: 15px;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-}
-#grundlegende-info {
-    width: 350px;
-    border: 1px solid var(--button-border-color);
-    border-radius: 15px;
-    background: var(--card-bg-color);
-    background-image: radial-gradient(at 88% 40%,
-            hsla(240, 15%, 9%, 0.1) 0px,
-            transparent 5%),
-        radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .5) 0px, transparent 50%),
-        radial-gradient(at 41% 4%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
-        radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
-}
-
-p {
-    font-size: 12px;
-    margin: 5px 0;
-}
-
-#hoehe {
-    padding-bottom: 25px;
-}
-
-#aktuelle-daten,
-.wrapper,
-#grundlegende-info {
-    display: none;
-}
-
-#stunden-container {
-    display: flex;
-    align-items: flex-start;
-    background: var(--card-bg-color);
-    border: 1px solid var(--button-border-color);
-    background-image: radial-gradient(at 88% 40%,
-            hsla(240, 15%, 9%, 0.1) 0px,
-            transparent 5%),
-        radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .5) 0px, transparent 50%),
-        radial-gradient(at 41% 4%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
-        radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
-    margin-top: 50px;
-    margin-bottom: 50px;
-    border-radius: 15px;
-}
-
-#y-axis {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-end;
-    height: 160px;
-    /* 80 Stufen * 2px */
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-top: 20px;
-    font-size: 14px;
-}
-
-#sliders-container {
-    padding-top: 20px;
-    display: flex;
-    gap: 4px;
-    margin-right: 5px;
-    margin-bottom: 10px;
-}
-
-.slider-wrapper {
-    padding-top: 20px;
-    position: relative;
-    height: 160px;
-    width: 8px;
-    border: 1px solid var(--button-border-color);
-    display: flex;
-    flex-direction: column-reverse;
-    padding-top: 20px;
-}
-
-.footer {
-    text-align: center;
-    margin-top: 20px;
-    padding: 20px 0;
-    background-color: var(--background-color);
-}
-
-.footer-text {
-    color: var(--status-color);
-    font-size: 14px;
-    margin-top: 10px;
-}
-
-#button-container {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-}
-
-/* Stile für das Diagramm-Container */
-#button-container button {
-    border-radius: 0px;
-    font-size: 11px;
-    padding: 8px;
-    margin: 4px;
-    text-align: center;
-    flex: 1 1 calc(100% / 2 - 4px);
-    max-width: calc(100% / 2 - 4px);
-    margin: 2px;
-}
-
-#button-container button:hover {
-    background-color: var(--button-hover-bg);
-    color: var(--background-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    cursor: url('./assets/pointer.png') 10 5, pointer;
-}
-
-#tempButton {
-    border-radius: 7px 0px 0px 0px !important;
-}
-
-#appTempButton {
-    border-radius: 0px 7px 0px 0px !important;
-}
-
-#pressure {
-    border-radius: 0px 0px 0px 7px !important;
-}
-
-#visibilityButton {
-    border-radius: 0px 0px 7px 0px !important;
-}
-
-#visibilityButton {}
-
-
-.active-button {
-    background-color: var(--button-hover-bg);
-    color: var(--background-color);
-}
-
-.extrahintergrund {
-    margin-top: 20px;
-    border: 1px solid var(--button-border-color);
-    height: 453px;
-    width: 350px;
-    border-radius: 15px;
-    background-image: radial-gradient(at 88% 40%,
-            hsla(240, 15%, 9%, 0.1) 0px,
-            transparent 5%),
-        radial-gradient(at 0% 4%, hsla(189, 99%, 26%, .5) 0px, transparent 50%),
-        radial-gradient(at 41% 4%, hsla(189, 97%, 36%, .5) 0px, transparent 50%),
-        radial-gradient(at 100% 99%, hsla(188, 94%, 13%, .5) 0px, transparent 50%);
-    animation: blob-bounce 5s infinite ease;
-    display: none;
-    /* ❌ Unsichtbar beim Laden */
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
-
-
-#diagramm-container {
-    padding-top: 20px;
-    width: 100%;
-    max-width: 350px;
-    height: 250px;
-
-    text-align: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    display: none;
-    /* ❌ Unsichtbar beim Laden */
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-
-}
-
-/* Stile für die einzelnen Diagramme */
-canvas {
-    width: 100%;
-    max-width: 350px;
-    background-color: rgba(0, 0, 0, 0.0);
-    /* Leicht transparenter Hintergrund */
-    border-radius: 10px;
-    /* Runde Ecken */
-    padding: 10px;
-    border: 0px solid #00bcd4;
-    /* Rahmenfarbe */
-    transition: all 0.4s ease-in-out;
-}
-
-#daily-extrahintergrund {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-    height: 473px;
-}
-
-#daily-extrahintergrund {
+    
     
 }
-#daily-button-container {
+
+/* Themenboxen */
+.topic-box {
+    aspect-ratio: 1 / 1;
+    min-width: 120px;
+    max-width: 100%;
     display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-}
-
-#daily-diagramm-container {
-    width: 100%;
-    max-width: 380px;
-    height: 250px;
-    margin: 20px auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: var(--color-text-light);
+    font-weight: bold;
     text-align: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    display: none;
-    /* ❌ Unsichtbar beim Laden */
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    text-transform: uppercase;
+    font-size: clamp(0.7rem, 1.4vw, 2rem); /* Behält die bestehende responsive Schriftgröße bei */
+    word-break: break-word; /* Stellt sicher, dass lange Wörter umgebrochen werden */
+    white-space: normal; /* Erlaubt normalen Textumbruch */
+    padding: 0 5%; /* Fügt 5% Padding links und rechts hinzu */
+    transition: filter 0.2s ease;
+    background-image: radial-gradient(at 2% 0%, rgba(236, 249, 255, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(5, 43, 61, 0.3) 0px, transparent 40%),
+        radial-gradient(at 20% 4%, rgba(5, 43, 61, 0.1) 0px, transparent 60%),
+        radial-gradient(at 100% 30%, rgba(5, 43, 61, 0.1) 0px, transparent 50%);
+
 }
 
-#daily-button-container button {
-    border-radius: 0px;
-    font-size: 11px;
-    padding: 8px;
-    margin: 4px;
-    text-align: center;
-    flex: 1 1 calc(100% / 2 - 4px);
-    max-width: calc(100% / 2 - 4px);
-    margin: 2px;
+
+.topic-box:hover {
+    filter: var(--hover-topic);
+    cursor: pointer;
 }
 
-#daily-button-container button:hover {
-    background-color: var(--button-hover-bg);
-    color: var(--background-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    cursor: url('./assets/pointer.png') 10 5, pointer;
-}
-#dailyTempButton {
-    border-radius: 7px 0px 0px 0px !important;
+/* Themenfarben */
+.topic-box.science {
+    background-color: var(--color-science);
 }
 
-#dailyAppTempButton {
-    border-radius: 0px 7px 0px 0px !important;
+.topic-box.history {
+    background-color: var(--color-history);
 }
 
-#dailyPressure {
-    border-radius: 0px 0px 0px 7px !important;
+.topic-box.geography {
+    background-color: var(--color-geography);
 }
 
-#dailyVisibilityButton {
-    border-radius: 0px 0px 7px 0px !important;
+.topic-box.culture {
+    background-color: var(--color-culture);
+}
+
+.topic-box.media {
+    background-color: var(--color-media);
+}
+
+.topic-box.sports {
+    background-color: var(--color-sports);
+}
+
+.topic-box.general {
+    background-color: var(--color-general);
+}
+
+/* Button unter dem Grid */
+.card-footer {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.btn {
+    background-color: var(--color-button);
+    color: var(--color-text-light);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: var(--hover-button);
 }
