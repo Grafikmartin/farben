@@ -55,7 +55,7 @@ body {
 }
 
 /* Header & Footer */
-.app-header,
+
 .app-footer {
     background-color: var(--primary-1);
     color: var(--color-text-dark);
@@ -74,11 +74,26 @@ main {
 }
 
 h1 {
-    font-size: 4rem;
+    font-size: 3rem;
     margin: 0;
-    color: var(--color-text-dark);
+     
+    color: var(--primary-1);
+    padding: 0,5rem;
+    text-align: center;
+   
+}
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 50px auto 0; /* Added 50px top margin */
+  gap: 8px; /* Reduced from 12px to make the space between logo and heading smaller */
 }
 
+.logo-image {
+  max-height: 100px; /* Increased size of the logo */
+  width: auto;
+}
 /* Suchfeld-Bereich */
 .search-section {
     margin: 2rem 0;
