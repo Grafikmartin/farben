@@ -56,16 +56,6 @@ body {
 
 /* Header & Footer */
 
-.app-footer {
-    background-color: var(--primary-1);
-    color: var(--color-text-dark);
-    padding: 1rem;
-    text-align: center;
-    background-image: radial-gradient(at 2% 0%, rgba(255, 253, 236, 0.1) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(42, 43, 7, 0.2) 0px, transparent 40%),
-        radial-gradient(at 20% 4%, rgba(128, 35, 35, 0.1) 0px, transparent 60%),
-        radial-gradient(at 100% 30%, rgba(41, 23, 9, 0.1) 0px, transparent 50%);
-}
 
 /* Hauptbereich */
 main {
@@ -93,6 +83,7 @@ h1 {
 .logo-image {
   max-height: 100px; /* Increased size of the logo */
   width: auto;
+  margin-top: -17px
 }
 /* Suchfeld-Bereich */
 .search-section {
@@ -409,4 +400,13 @@ h1 {
     to {
         transform: scaleX(0);
     }
+}.app-footer {
+    background-color: var(--primary-1);
+    color: var(--color-text-dark);
+    padding: 1rem;
+    text-align: center;
+    background-image: radial-gradient(at 2% 0%, rgba(255, 253, 236, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(42, 43, 7, 0.2) 0px, transparent 40%),
+        radial-gradient(at 20% 4%, rgba(128, 35, 35, 0.1) 0px, transparent 60%),
+        radial-gradient(at 100% 30%, rgba(41, 23, 9, 0.1) 0px, transparent 50%);
 }
