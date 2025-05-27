@@ -81,9 +81,9 @@ h1 {
 }
 
 .logo-image {
-  max-height: 100px; /* Increased size of the logo */
+  max-height: 60px; /* Increased size of the logo */
   width: auto;
-  margin-top: -17px
+  margin-top: -0px
 }
 /* Suchfeld-Bereich */
 .search-section {
